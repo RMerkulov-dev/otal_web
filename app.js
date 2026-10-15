@@ -152,14 +152,55 @@
     if (e.target === dialog && (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom)) dialog.close();
   });
   dialog.addEventListener('close', () => { document.body.classList.remove('modal-open'); dialogTrigger?.focus(); });
-  $('#contact-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (!form.reportValidity()) return;
-    const data = new FormData(form);
-    const body = `Ім’я: ${String(data.get('name')).trim()}\nТелефон: ${String(data.get('phone')).trim()}\n\nЗавдання: ${String(data.get('message')).trim()}`;
-    location.href = `mailto:ser_energo@ukr.net?subject=${encodeURIComponent('Запит з сайту ОТАЛ')}&body=${encodeURIComponent(body)}`;
-    $('.form-status').textContent = 'Лист підготовлено для поштової програми. Якщо вона не відкрилася, зателефонуйте або напишіть на ser_energo@ukr.net.';
+  const contactForm = $('#contact-form');
+  let submitting = false;
+  contactForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (submitting) return;
+    const status = $('.form-status');
+    const button = contactForm.querySelector('[type="submit"]');
+    const name = contactForm.elements.namedItem('name');
+    name.value = name.value.trim();
+    if (!contactForm.reportValidity()) return;
+    const data = new FormData(contactForm);
+    if (data.get('_honey')) return;
+    const payload = Object.fromEntries(data);
+    payload._url = location.href.split('#')[0];
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    const originalButton = button.innerHTML;
+    submitting = true;
+    button.disabled = true;
+    button.textContent = 'Надсилаємо…';
+    contactForm.setAttribute('aria-busy', 'true');
+    status.dataset.state = 'pending';
+    status.textContent = 'Зачекайте, надсилаємо вашу заявку.';
+    try {
+      const response = await fetch(contactForm.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      const result = await response.json();
+      if (!response.ok || (result.success !== true && result.success !== 'true')) {
+        throw new Error('Submission not accepted');
+      }
+      status.dataset.state = 'success';
+      status.textContent = 'Заявку прийнято сервісом надсилання. Дякуємо за звернення!';
+      contactForm.reset();
+    } catch (error) {
+      status.dataset.state = 'error';
+      status.textContent = error.name === 'AbortError'
+        ? 'Не отримали підтвердження вчасно. Заявка могла надійти. Зателефонуйте нам, щоб уточнити: +380 (68) 714-05-82. Ваші дані збережені у формі.'
+        : 'Не вдалося підтвердити надсилання. Спробуйте пізніше або зателефонуйте: +380 (68) 714-05-82. Ваші дані збережені у формі.';
+    } finally {
+      clearTimeout(timeout);
+      submitting = false;
+      button.disabled = false;
+      button.innerHTML = originalButton;
+      contactForm.removeAttribute('aria-busy');
+    }
   });
 
   let frame = 0;
