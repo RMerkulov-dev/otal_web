@@ -47,7 +47,8 @@ src/
   layouts/Base.astro   head, SEO-теги, JSON-LD (schema.org Electrician)
   components/          секції сторінки; .astro — статика, .tsx — React-острівці
   styles/global.css    дизайн-токени та оформлення
-legacy/                попередня версія сайту (vanilla HTML/CSS/JS), не збирається
+legacy/                попередні версії сайту (vanilla HTML/CSS/JS), не збираються;
+                       legacy/vercel-2026-10-15/ — версія, що була на otalweb.vercel.app
 ```
 
 Щоб змінити назву послуги чи посилання — редагуйте `src/data/services.ts`. Розмітка,
