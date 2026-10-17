@@ -1,0 +1,46 @@
+---
+import { company, nav } from '../data/company';
+import { services } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="shell footer__grid">
+    <div class="footer__brand">
+      <a class="wordmark" href="#top">
+        <svg viewBox="0 0 32 40" aria-hidden="true"><path d="M19 1 2 23h12l-2 16 19-25H18z"></path></svg>
+        ОТАЛ
+      </a>
+      <p>{company.tagline}. {company.address.city}, {company.address.region}.</p>
+    </div>
+
+    <nav aria-label="Послуги">
+      <h2 class="footer__heading">Послуги</h2>
+      <ul>
+        {services.map((service) => <li><a href={`#${service.id}`}>{service.title}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Розділи сайту">
+      <h2 class="footer__heading">Компанія</h2>
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href={company.catalog} rel="noopener">Каталог ser.od.ua</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="footer__heading">Контакти</h2>
+      <ul>
+        {company.phones.map((phone) => <li><a href={phone.href}>{phone.label}</a></li>)}
+        <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
+        <li>{company.hours.days}, {company.hours.time}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="shell footer__base">
+    <p>© {year} {company.legalName}</p>
+    <p>{company.address.postalCode}, м. {company.address.city}, {company.address.street}</p>
+  </div>
+</footer>

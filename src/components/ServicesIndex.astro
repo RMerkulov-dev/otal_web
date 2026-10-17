@@ -1,0 +1,48 @@
+---
+import { services } from '../data/services';
+import { company } from '../data/company';
+---
+
+<section id="services" class="band band--mist works" aria-labelledby="works-title">
+  <div class="shell">
+    <header class="section-head">
+      <h2 id="works-title" class="heading">Що ми робимо</h2>
+      <p class="lede">
+        Повний перелік робіт за напрямами. Вартість рахуємо під ваше завдання, за потреби — після
+        виїзду на об’єкт.
+      </p>
+    </header>
+
+    <div class="works__grid">
+      {
+        services.map((service) => (
+          <article class="work-group" id={service.id} aria-labelledby={`${service.id}-title`}>
+            <h3 id={`${service.id}-title`} class="work-group__title">{service.title}</h3>
+
+            <ul class="work-list">
+              {service.items.map((item) => (
+                <li>
+                  <a href={item.href} rel="noopener">
+                    <span>{item.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <a class="textlink work-group__more" href={service.categoryHref} rel="noopener">
+              Розділ у каталозі
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="works__footer">
+      <p>
+        Не знайшли свою задачу? Подзвоніть <a href={company.phones[0].href}>{company.phones[0].label}</a> —
+        скажемо, чи візьмемося і скільки це коштуватиме.
+      </p>
+      <a class="button button--ink" href="#contacts">Замовити розрахунок</a>
+    </div>
+  </div>
+</section>

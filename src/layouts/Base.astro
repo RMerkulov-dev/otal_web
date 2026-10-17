@@ -1,0 +1,95 @@
+---
+import '@fontsource-variable/onest';
+import '../styles/global.css';
+import { company } from '../data/company';
+import { services } from '../data/services';
+import onestCyrillic from '@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2?url';
+import onestLatin from '@fontsource-variable/onest/files/onest-latin-wght-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-cover.jpg', Astro.site).href;
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Electrician',
+  '@id': `${Astro.site}#business`,
+  name: company.legalName,
+  alternateName: company.shortName,
+  description: `${company.tagline}. Електротехнічна лабораторія, проєктування та кошториси, ремонт трансформаторів і розподільних пристроїв.`,
+  url: canonical,
+  telephone: company.phones.map((phone) => phone.href.replace('tel:', '')),
+  email: company.email,
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.address.street,
+    addressLocality: company.address.city,
+    addressRegion: company.address.region,
+    postalCode: company.address.postalCode,
+    addressCountry: 'UA',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
+  areaServed: { '@type': 'Country', name: company.areaServed },
+  sameAs: [company.catalog],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Послуги ТОВ «ОТАЛ»',
+    itemListElement: [
+      ...services.map((service) => ({
+        '@type': 'OfferCatalog',
+        name: service.title,
+        url: service.categoryHref,
+        itemListElement: service.items.map((item) => ({
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: item.title },
+          url: item.href,
+        })),
+      })),
+    ],
+  },
+};
+---
+
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0f2133" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content={company.legalName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Onest варіативний: один файл на всі накреслення; кирилиця й латиниця першого екрана. -->
+    <link rel="preload" as="font" type="font/woff2" href={onestCyrillic} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={onestLatin} crossorigin />
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} is:inline />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти до змісту</a>
+    <slot />
+  </body>
+</html>

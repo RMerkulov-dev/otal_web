@@ -1,0 +1,37 @@
+---
+import { company } from '../data/company';
+
+/** `todo: true` — цифри, яких ще немає від замовника. Підставте значення і приберіть прапорець. */
+const facts = [
+  { value: company.maxVoltage, label: 'найвищий клас напруги обладнання, з яким працюємо' },
+  { value: 'вся Україна', label: 'виїжджаємо на об’єкти з Теплодара' },
+  { value: 'XX', label: 'років на ринку', todo: true },
+  { value: 'XXX', label: 'об’єктів здано в експлуатацію', todo: true },
+];
+---
+
+<section id="about" class="band about" aria-labelledby="about-title">
+  <div class="shell">
+    <div class="about__grid">
+      <h2 id="about-title" class="heading about__title">
+        Електромонтажний підрядник повного циклу
+      </h2>
+      <p class="lede">
+        {company.legalName} проєктує, монтує, випробовує і ремонтує електрообладнання підстанцій,
+        ліній електропередачі та промислових об’єктів. Один підрядник веде об’єкт від креслення до
+        протоколів і залишається на обслуговуванні після здачі.
+      </p>
+    </div>
+
+    <dl class="facts">
+      {
+        facts.map((fact) => (
+          <div class:list={['facts__cell', { 'facts__cell--todo': fact.todo }]}>
+            <dd class="facts__value">{fact.value}</dd>
+            <dt class="facts__label">{fact.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

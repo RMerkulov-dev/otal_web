@@ -1,0 +1,1365 @@
+/* ==========================================================================
+   ОТАЛ — дизайн-система
+   Глибокий синій емалі шаф КРП, білі й сріблясто-сірі поверхні, жовтий
+   знака «Обережно! Висока напруга» — єдиний акцент, лише на діях.
+   ========================================================================== */
+
+:root {
+  --ink: #0f2133;
+  --ink-raised: #172e45;
+  --ink-deep: #0a1826;
+  --text: #13212f;
+  --steel: #556472;
+  --steel-light: #9aa8b5;
+  --mist: #edf1f4;
+  --line: #d5dce2;
+  --line-dark: #2a425a;
+  --paper: #ffffff;
+  --signal: #f5b800;
+  --signal-deep: #dda600;
+
+  /* Одне семейство на все: Onest — лаконічний гротеск з повною українською кирилицею. */
+  --font-display: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-text: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --step-xs: 0.8rem;
+  --step-s: 0.9rem;
+  --step-0: 1rem;
+  --step-1: clamp(1.06rem, 0.3vw + 1rem, 1.2rem);
+  --step-2: clamp(1.2rem, 0.6vw + 1.06rem, 1.5rem);
+  --step-3: clamp(1.5rem, 1.2vw + 1.2rem, 2.1rem);
+  --step-4: clamp(1.75rem, 2.2vw + 1.15rem, 2.75rem);
+  --step-5: clamp(1.75rem, 5vw + 0.9rem, 4.6rem);
+
+  --page: 80rem;
+  --gutter: clamp(1rem, 4.5vw, 4rem);
+  --header: 4.5rem;
+  --radius: 4px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: clamp(1rem, 0.2vw + 0.95rem, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, p, figure, figcaption, dl, dd, address {
+  margin: 0;
+}
+
+address {
+  font-style: normal;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.22em;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--signal);
+  color: var(--ink);
+  font-weight: 600;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* ===== Сітка й типографіка ============================================== */
+
+.shell {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.band {
+  padding-block: clamp(4rem, 8vw, 7.5rem);
+}
+
+.band--mist {
+  background: var(--mist);
+}
+
+.band--ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  max-width: 20ch;
+}
+
+.subheading {
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--steel);
+  max-width: 56ch;
+}
+
+.band--ink .lede {
+  color: var(--steel-light);
+}
+
+.section-head {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+@media (min-width: 60rem) {
+  .section-head {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+}
+
+/* ===== Дії ============================================================== */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: var(--step-s);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.button--small {
+  min-height: 2.75rem;
+  padding: 0.55rem 1.15rem;
+}
+
+/* Основна дія на темному тлі. */
+.button--light {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.button--light:hover {
+  background: var(--mist);
+}
+
+.button--glass {
+  border-color: rgb(255 255 255 / 0.45);
+  color: var(--paper);
+  background: rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(6px);
+}
+
+.button--glass:hover {
+  border-color: var(--paper);
+  background: rgb(255 255 255 / 0.14);
+}
+
+.button--ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button--ink:hover {
+  background: var(--ink-raised);
+}
+
+.textlink {
+  font-size: var(--step-s);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--signal);
+  text-underline-offset: 0.35em;
+}
+
+.textlink:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ===== Шапка ============================================================ */
+
+.masthead {
+  position: fixed;
+  z-index: 50;
+  inset: 0 0 auto;
+  height: var(--header);
+  color: var(--paper);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.masthead[data-solid] .button--light {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.masthead[data-solid] .button--light:hover {
+  background: var(--ink-raised);
+}
+
+.masthead[data-solid] {
+  background: var(--paper);
+  color: var(--text);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.masthead__shell {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 100%;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.wordmark svg {
+  width: 1.05rem;
+  fill: var(--signal);
+}
+
+.masthead__nav {
+  display: none;
+  margin-left: auto;
+}
+
+.masthead__nav ul {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.masthead__nav a {
+  font-size: var(--step-s);
+  font-weight: 500;
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.masthead__nav a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 2px;
+}
+
+.masthead__call {
+  display: none;
+  font-weight: 600;
+  font-size: var(--step-s);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.masthead__cta {
+  display: none;
+}
+
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+  padding: 0.6rem 0.2rem;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  font-size: var(--step-s);
+  cursor: pointer;
+}
+
+.nav-toggle__bars {
+  display: grid;
+  gap: 5px;
+  width: 1.4rem;
+}
+
+.nav-toggle__bars span {
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.3s var(--ease);
+}
+
+.nav-toggle__bars[data-open] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.nav-toggle__bars[data-open] span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+.nav-panel {
+  position: absolute;
+  inset: var(--header) 0 auto;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 1px solid var(--line-dark);
+}
+
+.nav-panel__list {
+  padding: 0.5rem var(--gutter);
+}
+
+.nav-panel__list a {
+  display: block;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line-dark);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  text-decoration: none;
+}
+
+.nav-panel__call {
+  display: block;
+  margin: 1rem var(--gutter) 1.5rem;
+  padding: 0.9rem;
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (min-width: 40rem) {
+  .masthead__call {
+    display: inline;
+    margin-left: auto;
+  }
+
+  .nav-toggle {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 72rem) {
+  .masthead__nav,
+  .masthead__cta {
+    display: block;
+  }
+
+  .masthead__call {
+    margin-left: 0;
+  }
+
+  .nav-toggle,
+  .nav-panel {
+    display: none;
+  }
+}
+
+/* ===== Перший екран: три сцени ========================================== */
+
+.hero {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Без JavaScript сцени просто стоять одна під одною. */
+.scene {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  overflow: hidden;
+}
+
+.scene__media {
+  position: absolute;
+  inset: 0;
+}
+
+.scene__media picture {
+  display: contents;
+}
+
+.scene__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scene__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(10 24 38 / 0.95) 0%, rgb(10 24 38 / 0.84) 40%, rgb(10 24 38 / 0.32) 75%, rgb(10 24 38 / 0.12) 100%),
+    linear-gradient(0deg, rgb(10 24 38 / 0.9) 0%, rgb(10 24 38 / 0) 38%),
+    linear-gradient(180deg, rgb(10 24 38 / 0.6) 0%, rgb(10 24 38 / 0) 20%),
+    linear-gradient(270deg, rgb(10 24 38 / 0.45) 0%, rgb(10 24 38 / 0) 18%);
+}
+
+.scene__shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr auto;
+  gap: clamp(1.25rem, 4vh, 2.5rem);
+  padding-top: calc(var(--header) + clamp(1rem, 5vh, 3rem));
+  padding-bottom: clamp(1.25rem, 4vh, 3rem);
+}
+
+.scene__copy {
+  align-self: center;
+  max-width: 46rem;
+  padding-left: 1rem;
+}
+
+.scene__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, min(3.6vw + 1rem, 8vh), 4.1rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.scene__text {
+  margin-top: clamp(0.75rem, 2.4vh, 1.5rem);
+  max-width: 34rem;
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.scene__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.25rem, 3.6vh, 2.25rem);
+}
+
+/* Факти стоять у колонках сітки: лівий край кожного — на лінії. */
+.scene__facts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.scene__fact {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  padding: 1rem 1.5rem 0 1rem;
+  border-top: 1px solid rgb(255 255 255 / 0.3);
+}
+
+@media (min-width: 80rem) {
+  .scene__fact {
+    grid-column: span 1;
+  }
+}
+
+.scene__fact dd {
+  /* У розмітці підпис (dt) іде першим; значення ставимо зверху, і всі значення ряду
+     стоять на одній лінії незалежно від довжини підписів. */
+  order: -1;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.scene__fact dt {
+  font-size: var(--step-xs);
+  line-height: 1.4;
+  color: rgb(255 255 255 / 0.66);
+}
+
+/* Сітка: вертикальні лінії колонок, горизонталь під шапкою і хрестики на перетинах. */
+.hero__grid {
+  display: none;
+}
+
+.hero.is-live .hero__grid {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__grid::before {
+  content: '';
+  position: absolute;
+  inset: var(--header) 0 auto;
+  height: 1px;
+  background: rgb(255 255 255 / 0.14);
+}
+
+.hero__grid-shell {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  height: 100%;
+}
+
+.hero__grid-shell span {
+  position: relative;
+  border-left: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.hero__grid-shell span:last-child {
+  border-right: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.hero__grid-shell span::before,
+.hero__grid-shell span:last-child::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--header) - 5px);
+  left: -5.5px;
+  width: 11px;
+  height: 11px;
+  background:
+    linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center / 1px 100% no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center / 100% 1px no-repeat;
+}
+
+.hero__grid-shell span:last-child::after {
+  left: auto;
+  right: -5.5px;
+}
+
+/* ----- Енергія: струм по лініях сітки та імпульс при зміні сцени -----
+   Рухаються лише transform і opacity, тож браузер не перемальовує сторінку.
+   Коли перший екран прокручено ([data-idle]), усе на паузі. */
+
+.hero__current {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 1px;
+  height: 22vh;
+  background: linear-gradient(180deg, rgb(245 184 0 / 0) 0%, rgb(245 184 0 / 0.95) 70%, rgb(255 236 170 / 1) 100%);
+  box-shadow: 0 0 6px rgb(245 184 0 / 0.55);
+  opacity: 0.8;
+  transform: translate3d(0, -25vh, 0);
+  animation: hero-current 9s linear infinite;
+}
+
+.hero__grid-shell span:nth-child(1) .hero__current { animation-duration: 8s; animation-delay: -1s; }
+.hero__grid-shell span:nth-child(2) .hero__current { animation-duration: 11s; animation-delay: -6s; }
+.hero__grid-shell span:nth-child(3) .hero__current { animation-duration: 9.5s; animation-delay: -3s; }
+.hero__grid-shell span:nth-child(4) .hero__current { animation-duration: 12s; animation-delay: -9s; }
+.hero__grid-shell span:nth-child(5) .hero__current { animation-duration: 8.5s; animation-delay: -5s; }
+.hero__grid-shell span:nth-child(6) .hero__current { animation-duration: 10.5s; animation-delay: -2s; }
+
+@keyframes hero-current {
+  from { transform: translate3d(0, -25vh, 0); }
+  to { transform: translate3d(0, 105vh, 0); }
+}
+
+.hero__grid::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--header) - 1px);
+  left: 0;
+  width: 30vw;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(245 184 0 / 0), rgb(245 184 0 / 0.9) 75%, rgb(255 236 170 / 1));
+  opacity: 0;
+  transform: translate3d(-30vw, 0, 0);
+}
+
+.hero__grid[data-surge]::after {
+  animation: hero-surge 1.6s var(--calm) both;
+}
+
+@keyframes hero-surge {
+  0% { opacity: 0; transform: translate3d(-30vw, 0, 0); }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(100vw, 0, 0); }
+}
+
+.hero[data-idle] .hero__current {
+  animation-play-state: paused;
+}
+
+/* Перемикач сцен: заповнюється разом із прокручуванням. */
+.hero__rail {
+  display: none;
+}
+
+.hero__rail a {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: rgb(255 255 255 / 0.62);
+  font-size: var(--step-s);
+  font-weight: 500;
+  text-shadow: 0 1px 10px rgb(10 24 38 / 0.9), 0 0 2px rgb(10 24 38 / 0.6);
+  transition: color 0.3s var(--ease);
+}
+
+.hero__rail a[aria-current],
+.hero__rail a:hover {
+  color: var(--paper);
+}
+
+.hero__rail-bar {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.22);
+}
+
+.hero__rail-bar span {
+  position: absolute;
+  inset: 0;
+  background: var(--signal);
+  transform-origin: 0 0;
+}
+
+.hero__next {
+  display: none;
+}
+
+.hero.is-live {
+  --calm: cubic-bezier(0.45, 0, 0.2, 1);
+  /* Кожна сцена займає 1,25 екрана прокручування: перемикання не наздоганяють одне одне. */
+  height: calc((var(--scenes) * 1.25 + 1) * 100vh);
+  height: calc((var(--scenes) * 1.25 + 1) * 100svh);
+}
+
+.hero.is-live .hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.hero.is-live .scene {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 1.4s var(--calm), visibility 0s linear 1.4s;
+}
+
+.hero.is-live .scene[data-active] {
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 1.4s var(--calm);
+}
+
+.hero.is-live :is(.scene__title, .scene__text, .scene__actions, .scene__facts) {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.5s var(--calm), transform 0.6s var(--calm);
+}
+
+.hero.is-live .scene[data-past] :is(.scene__title, .scene__text, .scene__actions, .scene__facts) {
+  transform: translateY(-1rem);
+}
+
+.hero.is-live .scene[data-active] :is(.scene__title, .scene__text, .scene__actions, .scene__facts) {
+  opacity: 1;
+  transform: none;
+  transition: opacity 1.1s var(--calm), transform 1.3s var(--calm);
+}
+
+.hero.is-live .scene[data-active] .scene__title { transition-delay: 0.55s; }
+.hero.is-live .scene[data-active] .scene__text { transition-delay: 0.7s; }
+.hero.is-live .scene[data-active] .scene__actions { transition-delay: 0.82s; }
+.hero.is-live .scene[data-active] .scene__facts { transition-delay: 0.95s; }
+
+.hero.is-live .hero__rail {
+  display: block;
+  position: absolute;
+  z-index: 2;
+}
+
+.hero.is-live .hero__rail-bar span {
+  transform: scaleX(var(--fill, 0));
+}
+
+.hero.is-live .hero__next {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter);
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgb(255 255 255 / 0.4);
+  border-radius: 50%;
+  color: var(--paper);
+  opacity: calc(1 - var(--progress, 0) * 3);
+}
+
+.hero__next svg {
+  width: 0.8rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* Телефон: перемикач — три відрізки зверху, факти ховаємо, щоб текст і кнопки вмістилися. */
+@media (max-width: 47.99rem) {
+  .hero__grid-shell {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hero__grid-shell span:nth-child(n + 5) {
+    display: none;
+  }
+
+  .hero__grid-shell span:nth-child(4) {
+    border-right: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .hero__grid-shell span:nth-child(4)::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--header) - 5px);
+    right: -5.5px;
+    width: 11px;
+    height: 11px;
+    background:
+      linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center / 1px 100% no-repeat,
+      linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center / 100% 1px no-repeat;
+  }
+
+  .scene__copy {
+    padding-left: 0;
+  }
+
+  .hero.is-live .hero__rail {
+    inset: calc(var(--header) + 1.1rem) var(--gutter) auto;
+  }
+
+  .hero__rail ol {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.35rem;
+  }
+
+  .hero__rail-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .hero__rail a {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    font-size: var(--step-xs);
+  }
+
+  .hero__rail-bar {
+    height: 3px;
+  }
+
+  .scene__shell {
+    padding-top: calc(var(--header) + 2.5rem);
+    padding-bottom: 5.5rem;
+  }
+
+  .scene__copy {
+    align-self: end;
+  }
+
+  /* «трансформаторів» і «електрообладнання» мають влізти в рядок. */
+  .scene__title {
+    font-size: clamp(1.75rem, 8.4vw, 2.4rem);
+  }
+
+  .scene__media::after {
+    background:
+      linear-gradient(0deg, rgb(10 24 38 / 0.96) 0%, rgb(10 24 38 / 0.82) 45%, rgb(10 24 38 / 0.35) 100%);
+  }
+
+  .scene__facts {
+    display: none;
+  }
+
+  .scene__actions .button {
+    flex: 1 1 100%;
+    white-space: normal;
+  }
+}
+
+@media (min-width: 48rem) {
+  .hero.is-live .hero__rail {
+    top: 50%;
+    right: var(--gutter);
+    transform: translateY(-50%);
+  }
+
+  .hero__rail ol {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .hero__rail a {
+    flex-direction: row-reverse;
+  }
+
+  .hero__rail-bar {
+    width: 3px;
+    height: clamp(1.75rem, 5vh, 2.75rem);
+  }
+
+  .hero.is-live .hero__rail-bar span {
+    transform: scaleY(var(--fill, 0));
+  }
+}
+
+@media (min-width: 48rem) and (max-height: 37.5rem) {
+  .scene__facts {
+    display: none;
+  }
+}
+
+/* ===== Про компанію ===================================================== */
+
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem 1.5rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.facts__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.facts__value {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.facts__cell--todo .facts__value {
+  color: var(--steel-light);
+  text-decoration: underline dashed var(--signal-deep) 2px;
+  text-underline-offset: 0.15em;
+}
+
+.facts__label {
+  max-width: 22ch;
+  font-size: var(--step-s);
+  line-height: 1.45;
+  color: var(--steel);
+}
+
+@media (min-width: 60rem) {
+  .about__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .facts {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===== Послуги ========================================================== */
+
+.works__grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.work-group {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  border-radius: var(--radius);
+  background: var(--paper);
+  scroll-margin-top: calc(var(--header) + 1rem);
+}
+
+.work-group__title {
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.work-group__more {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.works__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  margin-top: 2.5rem;
+  color: var(--steel);
+}
+
+.works__footer a:not(.button) {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (min-width: 46rem) {
+  .works__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .works__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.work-list {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.work-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step-s);
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.work-list a:hover span:first-child {
+  text-decoration: underline;
+  text-decoration-color: var(--signal);
+}
+
+/* ===== Лабораторія ====================================================== */
+
+.laboratory__grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.laboratory__body .lede {
+  margin-top: 1.25rem;
+}
+
+.reasons {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.reasons li {
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--signal);
+}
+
+.reasons h3 {
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.reasons p {
+  margin-top: 0.3rem;
+  color: var(--steel-light);
+  font-size: var(--step-s);
+}
+
+.laboratory__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 1.75rem;
+  margin-top: 2rem;
+}
+
+.laboratory__figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  min-height: 22rem;
+}
+
+.laboratory__figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.laboratory__figure figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 3rem 1.25rem 1.1rem;
+  background: linear-gradient(0deg, rgb(10 24 38 / 0.85), transparent);
+  font-size: var(--step-xs);
+  color: rgb(255 255 255 / 0.8);
+}
+
+@media (min-width: 60rem) {
+  .laboratory__grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 5rem;
+  }
+}
+
+/* ===== Як працюємо ====================================================== */
+
+.steps {
+  display: grid;
+  gap: 2rem;
+}
+
+.step {
+  position: relative;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--ink);
+}
+
+.step__index {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--signal-deep);
+}
+
+.step__title {
+  margin-top: 1.25rem;
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.step__text {
+  margin-top: 0.5rem;
+  font-size: var(--step-s);
+  color: var(--steel);
+}
+
+@media (min-width: 46rem) {
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===== Контакти та заявка =============================================== */
+
+.contacts__grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.contacts__info .lede {
+  margin-top: 1.25rem;
+}
+
+.contacts__phones {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 2.5rem;
+}
+
+.contacts__phones a {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.contacts__phones a:hover {
+  color: var(--signal);
+}
+
+.contacts__list {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.contacts__list dt {
+  font-size: var(--step-xs);
+  color: var(--steel-light);
+}
+
+.contacts__list dd {
+  margin-top: 0.2rem;
+}
+
+.contacts__list .textlink {
+  display: inline-block;
+  margin-top: 0.4rem;
+}
+
+.request {
+  display: grid;
+  gap: 1rem;
+  align-self: start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--text);
+}
+
+.request__title {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field span {
+  font-size: var(--step-xs);
+  font-weight: 600;
+  color: var(--steel);
+}
+
+.field :is(input, select, textarea) {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--mist);
+  font-size: 1rem;
+}
+
+.field :is(input, select, textarea):focus {
+  border-color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(245 184 0 / 0.45);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.request__submit {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.request__note {
+  font-size: var(--step-xs);
+  color: var(--steel);
+}
+
+@media (min-width: 60rem) {
+  .contacts__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+}
+
+/* ===== Підвал ============================================================ */
+
+.footer {
+  background: var(--ink-deep);
+  color: var(--steel-light);
+  font-size: var(--step-s);
+}
+
+.footer__grid {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: clamp(3rem, 6vw, 4.5rem);
+}
+
+.footer__brand .wordmark {
+  color: var(--paper);
+}
+
+.footer__brand p {
+  margin-top: 1rem;
+  max-width: 30ch;
+}
+
+.footer__heading {
+  margin-bottom: 1rem;
+  font-size: var(--step-s);
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.footer ul {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--paper);
+}
+
+.footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line-dark);
+  font-size: var(--step-xs);
+}
+
+@media (min-width: 46rem) {
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .footer__grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  }
+}
+
+/* ===== Менше руху ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero__current,
+  .hero__grid::after {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    animation-duration: 0.001ms !important;
+  }
+}

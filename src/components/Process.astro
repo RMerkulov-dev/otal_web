@@ -1,0 +1,40 @@
+---
+const steps = [
+  {
+    title: 'Надсилаєте завдання',
+    text: 'Опис об’єкта, напруга, обсяг робіт. Якщо є проєкт або дефектний акт — додайте до заявки.',
+  },
+  {
+    title: 'Рахуємо вартість',
+    text: 'За потреби виїжджаємо на об’єкт. Кошторис складаємо в АВК-5 — його приймає і замовник, і експертиза.',
+  },
+  {
+    title: 'Виконуємо роботи',
+    text: 'Монтаж, пусконалагодження або ремонт власною бригадою і технікою.',
+  },
+  {
+    title: 'Здаємо з документами',
+    text: 'Передаємо об’єкт з протоколами лабораторії та виконавчою документацією.',
+  },
+];
+---
+
+<section id="process" class="band band--mist process" aria-labelledby="process-title">
+  <div class="shell">
+    <header class="section-head">
+      <h2 id="process-title" class="heading">Як ми працюємо</h2>
+    </header>
+
+    <ol class="steps">
+      {
+        steps.map((step, index) => (
+          <li class="step">
+            <span class="step__index" aria-hidden="true">{index + 1}</span>
+            <h3 class="step__title">{step.title}</h3>
+            <p class="step__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

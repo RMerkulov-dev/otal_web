@@ -1,0 +1,350 @@
+---
+import { Picture } from 'astro:assets';
+import { services } from '../data/services';
+import montazh from '../assets/hero/montazh.jpg';
+import remont from '../assets/hero/remont.jpg';
+import proektuvannya from '../assets/hero/proektuvannya.jpg';
+import laboratoriya from '../assets/hero/laboratoriya.jpg';
+import tehnika from '../assets/hero/tehnika.jpg';
+import zvaryuvannya from '../assets/hero/zvaryuvannya.jpg';
+
+const byId = (id: string) => services.find((service) => service.id === id)!;
+
+/** Шість перших екранів — по одному на розділ каталогу, у тому ж порядку.
+    Прокручування перемикає їх по черзі, далі сторінка гортається як звичайно.
+    Без JavaScript це просто шість повноекранних блоків. */
+const scenes = [
+  {
+    id: 'scene-installation',
+    short: 'Монтаж',
+    title: 'Монтаж електрообладнання до 330 кВ',
+    text: 'Трансформатори, кабельні й повітряні лінії, розподільні пристрої. Беремо об’єкт від проєкту до здачі в експлуатацію.',
+    image: montazh,
+    imageAlt: 'Силовий трансформатор і шафи відкритої підстанції після монтажу',
+    service: byId('installation'),
+    facts: [
+      { value: 'до 330 кВ', label: 'повітряні лінії та підстанції' },
+      { value: '0,4 — 35 кВ', label: 'кабельні лінії' },
+      { value: 'під ключ', label: 'від проєкту до здачі в експлуатацію' },
+    ],
+  },
+  {
+    id: 'scene-repair',
+    short: 'Ремонт',
+    title: 'Ремонт трансформаторів і розподільних пристроїв',
+    text: 'Перемотуємо обмотки, ревізуємо вимикачі, модернізуємо РП. Повертаємо в роботу те, що вже стоїть на об’єкті.',
+    image: remont,
+    imageAlt: 'Вимикач середньої напруги на стенді під час ревізії',
+    service: byId('repair'),
+    facts: [
+      { value: 'обмотки', label: 'ремонт силових трансформаторів' },
+      { value: '0,4 — 35 кВ', label: 'ревізія і ремонт вимикачів' },
+      { value: 'до 330 кВ', label: 'модернізація розподільних пристроїв' },
+    ],
+  },
+  {
+    id: 'scene-design',
+    short: 'Проєктування',
+    title: 'Проєктування і кошториси',
+    text: 'Вишукування на об’єкті, проєктна документація та кошториси в АВК-5, які приймають і замовник, і експертиза.',
+    image: proektuvannya,
+    imageAlt: 'Геодезичний прилад і креслення на території підстанції',
+    service: byId('design'),
+    facts: [
+      { value: 'вишукування', label: 'обстеження об’єкта перед проєктом' },
+      { value: 'проєкт', label: 'документація на електропостачання' },
+      { value: 'АВК-5', label: 'програма, в якій складаємо кошториси' },
+    ],
+  },
+  {
+    id: 'scene-laboratory',
+    short: 'Лабораторія',
+    title: 'Власна електротехнічна лабораторія',
+    text: 'Вимірюємо й випробовуємо обладнання та засоби захисту, видаємо протоколи для енергонагляду — без сторонніх підрядників.',
+    image: laboratoriya,
+    imageAlt: 'Прилад для вимірювання опору ізоляції підключений до трансформатора',
+    service: byId('laboratory-service'),
+    facts: [
+      { value: 'протоколи', label: 'для енергонагляду' },
+      { value: 'КЛ', label: 'випробування підвищеною напругою' },
+      { value: 'ЗІЗ', label: 'перевірка засобів захисту' },
+    ],
+  },
+  {
+    id: 'scene-machinery',
+    short: 'Техніка',
+    title: 'Спецтехніка з оператором',
+    text: 'Автовишка, міні-екскаватор і кран-маніпулятор виїжджають разом з бригадою — не треба шукати техніку окремо.',
+    image: tehnika,
+    imageAlt: 'Міні-екскаватор копає траншею під кабель на підстанції',
+    service: byId('machinery-service'),
+    facts: [
+      { value: '65 м', label: 'висота підйому автовишки' },
+      { value: 'Hanix SB20', label: 'міні-екскаватор для траншей' },
+      { value: 'Hiab 100', label: 'кран-маніпулятор' },
+    ],
+  },
+  {
+    id: 'scene-welding',
+    short: 'Зварювання',
+    title: 'Зварювальні роботи',
+    text: 'Металоконструкції, рами під обладнання й закладні деталі під електромонтаж на вашому об’єкті.',
+    image: zvaryuvannya,
+    imageAlt: 'Зварена сталева рама на столі в цеху',
+    service: byId('welding'),
+    facts: [
+      { value: 'рами', label: 'під трансформатори і шафи' },
+      { value: 'закладні', label: 'деталі під електромонтаж' },
+      { value: 'конструкції', label: 'металеві, під ваш проєкт' },
+    ],
+  },
+];
+---
+
+<section class="hero" id="hero" aria-label="Основні напрями робіт" data-hero style={`--scenes: ${scenes.length}`}>
+  <!-- Вмикаємо закріплений режим ще до розбору фото: інакше браузер встигне
+       завантажити всі шість «лінивих» картинок, поки сцени стоять стовпчиком. -->
+  <script is:inline>document.currentScript.parentElement.classList.add('is-live');</script>
+  <div class="hero__stage">
+    {
+      scenes.map((scene, index) => (
+        <article
+          class="scene"
+          id={scene.id}
+          data-scene={index}
+          data-active={index === 0 || undefined}
+          aria-labelledby={`${scene.id}-title`}
+        >
+          <div class="scene__media" aria-hidden={index > 0 || undefined}>
+            {index < 2 ? (
+              <Picture
+                src={scene.image}
+                alt={scene.imageAlt}
+                formats={['avif', 'webp']}
+                widths={[640, 1024, 1440, scene.image.width]}
+                sizes="100vw"
+                quality={72}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchpriority={index === 0 ? 'high' : undefined}
+                decoding="async"
+              />
+            ) : (
+              /* Далекі сцени: фото лежить у <noscript>, тож браузер з JavaScript його
+                 не завантажує. Скрипт вставляє його, коли до сцени лишається одна. */
+              <noscript data-deferred>
+                <Picture
+                  src={scene.image}
+                  alt={scene.imageAlt}
+                  formats={['avif', 'webp']}
+                  widths={[640, 1024, 1440, scene.image.width]}
+                  sizes="100vw"
+                  quality={72}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </noscript>
+            )}
+          </div>
+
+          <div class="shell scene__shell">
+            <div class="scene__copy">
+              {index === 0 ? (
+                <h1 id={`${scene.id}-title`} class="scene__title">
+                  {scene.title}
+                </h1>
+              ) : (
+                <h2 id={`${scene.id}-title`} class="scene__title">
+                  {scene.title}
+                </h2>
+              )}
+              <p class="scene__text">{scene.text}</p>
+
+              <div class="scene__actions">
+                <a class="button button--light" href="#contacts">
+                  Залишити заявку
+                </a>
+                <a class="button button--glass" href={`#${scene.service.id}`}>
+                  Що входить
+                </a>
+              </div>
+            </div>
+
+            <dl class="scene__facts">
+              {scene.facts.map((fact) => (
+                <div class="scene__fact">
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </article>
+      ))
+    }
+
+    <!-- Модульна сітка поверх фото: колонки макета, до яких вирівняні тексти й цифри. -->
+    <div class="hero__grid" aria-hidden="true" data-grid>
+      <div class="shell hero__grid-shell">
+        {Array.from({ length: 6 }, () => <span><i class="hero__current" /></span>)}
+      </div>
+    </div>
+
+    <nav class="hero__rail" aria-label="Напрями на першому екрані">
+      <ol>
+        {
+          scenes.map((scene, index) => (
+            <li>
+              <a href={`#${scene.id}`} data-goto={index} aria-current={index === 0 ? 'true' : undefined}>
+                <span class="hero__rail-bar"><span></span></span>
+                <span class="hero__rail-label">{scene.short}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    <a class="hero__next" href="#about" aria-label="До розділу «Про компанію»">
+      <svg viewBox="0 0 16 24" aria-hidden="true"><path d="M8 2v18M2 14l6 6 6-6"></path></svg>
+    </a>
+  </div>
+</section>
+
+<script>
+  /* Закріплений перший екран: поки секція прокручується, сцени змінюють одна одну.
+     Довжина секції — по одному екрану на сцену, тож після третьої сторінка
+     просто їде далі. */
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero) {
+    const scenes = [...hero.querySelectorAll<HTMLElement>('[data-scene]')];
+    const links = [...hero.querySelectorAll<HTMLAnchorElement>('[data-goto]')];
+    const count = scenes.length;
+    let current = 0;
+    let frame = 0;
+
+    hero.classList.add('is-live');
+
+    /* Фото сцен 2–6 вантажаться не одразу. Щойно сцена стає поточною,
+       підвантажуємо сусідні — до перемикання вони вже в кеші. */
+    const warm = (index: number) => {
+      [index, index - 1, index + 1].forEach((i) => {
+        const media = scenes[i]?.querySelector('.scene__media');
+        const deferred = media?.querySelector<HTMLElement>('noscript[data-deferred]');
+        if (deferred) {
+          deferred.insertAdjacentHTML('afterend', deferred.textContent ?? '');
+          deferred.remove();
+        }
+        const img = media?.querySelector('img');
+        if (img && img.loading === 'lazy') img.loading = 'eager';
+      });
+    };
+
+    /* При зміні сцени лінією під шапкою пробігає імпульс — «подали напругу». */
+    const grid = hero.querySelector<HTMLElement>('[data-grid]');
+    const surge = () => {
+      if (!grid) return;
+      grid.removeAttribute('data-surge');
+      void grid.offsetWidth;
+      grid.setAttribute('data-surge', '');
+    };
+
+    const show = (index: number) => {
+      if (index === current) return;
+      warm(index);
+      surge();
+      scenes.forEach((scene, i) => {
+        scene.toggleAttribute('data-active', i === index);
+        scene.toggleAttribute('data-past', i < index);
+        scene.querySelector('.scene__media')?.setAttribute('aria-hidden', String(i !== index));
+      });
+      links.forEach((link, i) => {
+        if (i === index) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+      current = index;
+    };
+
+    /* force — після автопоказу повернути сцену, що відповідає прокручуванню, без запасу на межі. */
+    let force = false;
+    const update = () => {
+      frame = 0;
+      const rect = hero.getBoundingClientRect();
+      const travel = hero.offsetHeight - window.innerHeight;
+      const progress = Math.min(Math.max(-rect.top / travel, 0), 1);
+      const position = progress * count;
+      hero.style.setProperty('--progress', progress.toFixed(4));
+      /* Перший екран прокручено — ставимо анімацію енергії на паузу. */
+      hero.toggleAttribute('data-idle', rect.bottom < window.innerHeight * 0.15);
+      links.forEach((link, i) => {
+        const fill = Math.min(Math.max(position - i, 0), 1);
+        link.style.setProperty('--fill', fill.toFixed(3));
+      });
+      /* Запас біля межі сцен: якщо зупинитися на стику, сцени не блимають туди-сюди. */
+      const target = Math.min(Math.floor(position), count - 1);
+      const margin = force ? 0 : 0.08;
+      force = false;
+      if (target > current && position >= target + margin) show(target);
+      else if (target < current && position <= current - margin) show(target);
+    };
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const index = Number(link.dataset.goto);
+        const travel = hero.offsetHeight - window.innerHeight;
+        const top = hero.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top + (travel / count) * (index + 0.5) });
+      });
+    });
+
+    /* Автопоказ: хвилину ні кліку, ні прокручування — сцени гортаються самі по колу.
+       Сторінка при цьому не прокручується. Будь-яка дія зупиняє показ і повертає сцену,
+       що відповідає прокручуванню. Не грає, коли вкладка прихована або перший екран прокручено. */
+    const IDLE_MS = 60_000;
+    const STEP_MS = 7_000;
+    let idleTimer = 0;
+    let autoTimer = 0;
+
+    const canAutoplay = () => !document.hidden && !hero.hasAttribute('data-idle');
+
+    const advance = () => {
+      if (!canAutoplay()) return arm();
+      const next = (current + 1) % count;
+      show(next);
+      links.forEach((link, i) => link.style.setProperty('--fill', i <= next ? '1' : '0'));
+    };
+
+    const startAuto = () => {
+      if (!canAutoplay()) return arm();
+      advance();
+      autoTimer = window.setInterval(advance, STEP_MS);
+    };
+
+    function arm() {
+      if (autoTimer) {
+        window.clearInterval(autoTimer);
+        autoTimer = 0;
+        force = true;
+        schedule();
+      }
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(startAuto, IDLE_MS);
+    }
+
+    ['scroll', 'wheel', 'pointerdown', 'touchstart', 'keydown'].forEach((type) =>
+      window.addEventListener(type, arm, { passive: true }),
+    );
+    document.addEventListener('visibilitychange', arm);
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+    arm();
+    if (document.readyState === 'complete') warm(current);
+    else window.addEventListener('load', () => warm(current), { once: true });
+  }
+</script>

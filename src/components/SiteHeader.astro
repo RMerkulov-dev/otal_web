@@ -1,0 +1,31 @@
+---
+import NavMenu from './NavMenu.tsx';
+import { company, nav } from '../data/company';
+---
+
+<header class="masthead" data-masthead>
+  <div class="shell masthead__shell">
+    <a class="wordmark" href="#top">
+      <svg viewBox="0 0 32 40" aria-hidden="true"><path d="M19 1 2 23h12l-2 16 19-25H18z"></path></svg>
+      ОТАЛ
+    </a>
+    <NavMenu client:idle items={[...nav]} phone={{ ...company.phones[0] }} />
+  </div>
+</header>
+
+<script>
+  /* Поверх фото першого екрана шапка прозора; далі — суцільна світла. */
+  const masthead = document.querySelector<HTMLElement>('[data-masthead]');
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (masthead) {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const limit = hero ? hero.offsetTop + hero.offsetHeight - masthead.offsetHeight * 2 : 40;
+      masthead.toggleAttribute('data-solid', window.scrollY >= limit);
+    };
+    window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>

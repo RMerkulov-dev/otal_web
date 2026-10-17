@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import ServicesIndex from '../components/ServicesIndex.astro';
+import Laboratory from '../components/Laboratory.astro';
+import Process from '../components/Process.astro';
+import Contacts from '../components/Contacts.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<Base
+  title="ОТАЛ — монтаж, випробування і ремонт електрообладнання до 330 кВ | Теплодар, Одеська область"
+  description="ТОВ «ОТАЛ»: монтаж силових трансформаторів, кабельних і повітряних ліній, ремонт розподільних пристроїв, власна електротехнічна лабораторія, проєктування та кошториси в АВК-5. Теплодар, роботи по всій Україні."
+>
+  <span id="top"></span>
+  <SiteHeader />
+  <main id="main">
+    <Hero />
+    <About />
+    <ServicesIndex />
+    <Laboratory />
+    <Process />
+    <Contacts />
+  </main>
+  <SiteFooter />
+</Base>

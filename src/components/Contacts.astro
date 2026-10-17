@@ -1,0 +1,95 @@
+---
+import { company } from '../data/company';
+import { services } from '../data/services';
+---
+
+<section id="contacts" class="band band--ink contacts" aria-labelledby="contacts-title">
+  <div class="shell contacts__grid">
+    <div class="contacts__info">
+      <h2 id="contacts-title" class="heading">Розрахуємо вартість робіт</h2>
+      <p class="lede">
+        Заявки приймає {company.contactPerson}. Подзвоніть у робочі години або залиште заявку — відповімо
+        з розрахунком і строками.
+      </p>
+
+      <div class="contacts__phones">
+        {company.phones.map((phone) => <a href={phone.href}>{phone.label}</a>)}
+      </div>
+
+      <dl class="contacts__list">
+        <div>
+          <dt>Пошта</dt>
+          <dd><a href={`mailto:${company.email}`}>{company.email}</a></dd>
+        </div>
+        <div>
+          <dt>Години роботи</dt>
+          <dd>{company.hours.days}, {company.hours.time}<br />{company.hours.weekend}</dd>
+        </div>
+        <div>
+          <dt>Адреса</dt>
+          <dd>
+            <address>
+              {company.address.region}, м. {company.address.city}, {company.address.street}
+            </address>
+            <a class="textlink" href={company.mapUrl} rel="noopener">Показати на мапі</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <form
+      class="request"
+      action={`mailto:${company.email}`}
+      method="post"
+      enctype="text/plain"
+      data-request
+      aria-labelledby="request-title"
+    >
+      <h3 id="request-title" class="request__title">Заявка на розрахунок</h3>
+
+      <label class="field">
+        <span>Ім’я або компанія</span>
+        <input name="name" autocomplete="organization" required />
+      </label>
+      <label class="field">
+        <span>Телефон</span>
+        <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required />
+      </label>
+      <label class="field">
+        <span>Напрям робіт</span>
+        <select name="service">
+          {services.map((service) => <option>{service.title}</option>)}
+          <option>Інше</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Що треба зробити</span>
+        <textarea name="task" rows="4" placeholder="Об’єкт, напруга, обсяг робіт"></textarea>
+      </label>
+
+      <button class="button button--ink request__submit" type="submit">Надіслати заявку</button>
+      <p class="request__note">Відкриється ваша пошта з уже заповненим листом на {company.email}.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  /* Статичний сайт без сервера: заявка збирається в лист і відкривається в поштовому клієнті. */
+  const form = document.querySelector<HTMLFormElement>('[data-request]');
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const data = new FormData(form);
+    const field = (key: string) => String(data.get(key) ?? '').trim();
+    const subject = `Заявка з сайту: ${field('service')}`;
+    const body = [
+      `Ім’я / компанія: ${field('name')}`,
+      `Телефон: ${field('phone')}`,
+      `Напрям: ${field('service')}`,
+      '',
+      field('task'),
+    ].join('\n');
+    const to = form.action.replace(/^mailto:/, '');
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>

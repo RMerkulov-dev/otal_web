@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/services';
+
+/** Тут — чим лабораторія корисна замовнику. Перелік випробувань — у розділі «Що ми робимо». */
+const reasons = [
+  {
+    title: 'Здача без очікування',
+    text: 'Випробування після монтажу чи ремонту робимо в ті самі строки — об’єкт не простоює, поки ви шукаєте окрему лабораторію.',
+  },
+  {
+    title: 'Документи для енергонагляду',
+    text: 'Оформлюємо протоколи вимірювань і випробувань у вигляді, який приймає інспекція.',
+  },
+  {
+    title: 'Планові й аварійні виїзди',
+    text: 'Профілактичні випробування за графіком або перевірка після пошкодження кабельної лінії.',
+  },
+];
+---
+
+<section id="laboratory" class="band band--ink laboratory" aria-labelledby="laboratory-title">
+  <div class="shell laboratory__grid">
+    <div class="laboratory__body">
+      <h2 id="laboratory-title" class="heading">Електротехнічна лабораторія</h2>
+      <p class="lede">
+        Перевіряємо силове обладнання, кабельні лінії підвищеною напругою та засоби індивідуального
+        захисту.
+      </p>
+
+      <ul class="reasons">
+        {
+          reasons.map((reason) => (
+            <li>
+              <h3>{reason.title}</h3>
+              <p>{reason.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="laboratory__actions">
+        <a class="button button--light" href="#contacts">Замовити випробування</a>
+        <a class="textlink" href="#laboratory-service">Усі види випробувань</a>
+      </div>
+    </div>
+
+    <figure class="laboratory__figure">
+      <Image
+        src={photos.laboratoriya}
+        alt="Вимірювання струму кліщами у розподільному пристрої"
+        widths={[420, 680]}
+        sizes="(max-width: 56rem) 100vw, 34rem"
+        loading="lazy"
+      />
+      <figcaption>Вимірювання на відхідній лінії розподільного пристрою</figcaption>
+    </figure>
+  </div>
+</section>
